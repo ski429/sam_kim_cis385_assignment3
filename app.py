@@ -1,32 +1,36 @@
-from flask import Flask, request
-from flask_restful import Resource, Api
+from flask import Flask
+from flask_restful import Resource, Api, reqparse
 
 app = Flask(__name__)
 api = Api(app)
 
-notes = [
-    {
-        'id': 0,
-        'title': 'hello',
-        'body': 'world'
+notes_put_args = reqparse.RequestParser()
+notes_put_args.add_argument("title", type=str, help="title of note")
+notes_put_args.add_argument("body", type=str, help="body of note")
+
+notes = {
+    0: {
+        "title": "todo",
+        "body": "fill up gas"
     },
-    {
-        'id': 1,
-        'title': 'hello',
-        'body': 'everybody'
+    1: {
+        "title": "grocery",
+        "body": "milk, eggs"
     }
-]
+}
 
 
-@api.route('/notes/')
-def get(self):
-    return notes
+class Note(Resource):
+    def get(self, note_id):
+        return notes[note_id]
+
+    def put(self, note_id):
+        args = notes_put_args.parse_args()
+        return {note_id: args}
 
 
-@api.route('/notes/<int:note_id>')
-def get(self, note_id):
-    return [note for note in notes if note[note_id] == note_id]
+api.add_resource(Note, '/notes/<int:note_id>')
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
