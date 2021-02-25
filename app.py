@@ -8,16 +8,18 @@ notes_put_args = reqparse.RequestParser()
 notes_put_args.add_argument("title", type=str, help="title of note")
 notes_put_args.add_argument("body", type=str, help="body of note")
 
-notes = {
-    0: {
+notes = [
+    {
+        "id": 0,
         "title": "todo",
         "body": "fill up gas"
     },
-    1: {
+    {
+        "id": 1,
         "title": "grocery",
         "body": "milk, eggs"
     }
-}
+]
 
 
 class Note(Resource):
@@ -29,8 +31,22 @@ class Note(Resource):
         return {note_id: args}
 
 
-api.add_resource(Note, '/notes/<int:note_id>')
+class NoteByTitle(Resource):
+    def get(self, title):
+        for note in notes:
+            if note['title'] == title:
+                return note
+        return {}
 
+
+class AllNotes(Resource):
+    def get(self):
+        return notes
+
+
+api.add_resource(Note, '/notes/<int:note_id>')
+api.add_resource(NoteByTitle, '/notes/<string:title>')
+api.add_resource(AllNotes, '/notes/')
 
 if __name__ == '__main__':
     app.run(debug=True)
