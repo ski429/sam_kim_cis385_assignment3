@@ -49,13 +49,15 @@ class Note(Resource):
 
 class NoteByTitle(Resource):
     def get(self, title):
-        for note in notes:
-            if note['title'] == title:
-                return note
-        return {}
+        return get_note("title", title)
 
     def put(self, title):
-        pass
+        temp = get_note("title", title)
+        if temp is None:
+            return None
+        args = notes_put_args.parse_args()
+        temp["body"] = args["body"]
+        return temp
 
     def post(self, title):
         pass
