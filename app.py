@@ -34,7 +34,13 @@ class Note(Resource):
         return get_note("id", note_id)
 
     def put(self, note_id):
-        pass
+        temp = get_note("id", note_id)
+        if temp is None:
+            return None
+        args = notes_put_args.parse_args()
+        for k, v in args.items():
+            temp[k] = v
+        return temp
 
     def delete(self, note_id):
         notes.remove(get_note("id", note_id))
