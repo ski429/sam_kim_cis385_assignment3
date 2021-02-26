@@ -15,7 +15,7 @@ notes = [
         "body": "fill up gas"
     },
     {
-        "id": 1,
+        "id": 2,
         "title": "grocery",
         "body": "milk, eggs"
     }
@@ -31,15 +31,14 @@ def get_note(param, key):
 
 class Note(Resource):
     def get(self, note_id):
-        return notes[note_id]
+        return get_note("id", note_id)
 
     def put(self, note_id):
-        args = notes_put_args.parse_args()
-        args["id"] = len(notes)
-        return args
+        pass
 
     def delete(self, note_id):
-        pass
+        notes.remove(get_note("id", note_id))
+        return notes
 
 
 class NoteByTitle(Resource):
