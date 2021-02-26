@@ -22,13 +22,21 @@ notes = [
 ]
 
 
+def get_note(param, key):
+    for note in notes:
+        if note[param] == key:
+            return note
+    return None
+
+
 class Note(Resource):
     def get(self, note_id):
         return notes[note_id]
 
     def put(self, note_id):
         args = notes_put_args.parse_args()
-        return {note_id: args}
+        args["id"] = len(notes)
+        return args
 
     def delete(self, note_id):
         pass
