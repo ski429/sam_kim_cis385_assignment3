@@ -30,6 +30,9 @@ class Note(Resource):
         args = notes_put_args.parse_args()
         return {note_id: args}
 
+    def delete(self, note_id):
+        pass
+
 
 class NoteByTitle(Resource):
     def get(self, title):
@@ -37,6 +40,12 @@ class NoteByTitle(Resource):
             if note['title'] == title:
                 return note
         return {}
+
+    def put(self, title):
+        pass
+
+    def post(self, title):
+        pass
 
 
 class AllNotes(Resource):
