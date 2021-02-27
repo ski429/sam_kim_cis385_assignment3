@@ -60,7 +60,14 @@ class NoteByTitle(Resource):
         return temp
 
     def post(self, title):
-        pass
+        if get_note("title", title) is not None:
+            return "Note already exists"
+        args = notes_put_args.parse_args()
+        next_id = notes[-1]["id"] + 1
+        args["id"] = next_id
+        args["title"] = title
+        notes.append(args)
+        return next_id
 
 
 class AllNotes(Resource):
