@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, make_response
 from flask_restful import Resource, Api, reqparse
 
 app = Flask(__name__)
@@ -26,7 +26,8 @@ def get_note(param, key):
     for note in notes:
         if note[param] == key:
             return note
-    return None
+    response = make_response("Note not found.", 404)
+    return response
 
 
 class Note(Resource):
