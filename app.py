@@ -33,13 +33,13 @@ class Note(Resource):
     def get(self, note_id):
         temp = get_note("id", note_id)
         if temp is None:
-            return make_response("Note not found.", 404)
+            return make_response('Note {:d} not found.'.format(note_id), 404)
         return make_response(temp, 200)
 
     def put(self, note_id):
         temp = get_note("id", note_id)
         if temp is None:
-            return make_response("Note not found.", 404)
+            return make_response('Note {:d} not found.'.format(note_id), 404)
         args = notes_put_args.parse_args()
         print(args.items())
         for k, v in args.items():
@@ -56,15 +56,18 @@ class Note(Resource):
 
 class NoteByTitle(Resource):
     def get(self, title):
-        return get_note("title", title)
+        temp = get_note("title", title)
+        if temp is None:
+            return make_response("Note not found.", 404)
+        return make_response(temp, 200)
 
     def put(self, title):
         temp = get_note("title", title)
         if temp is None:
-            return None
+            return make_response("Note not found.", 404)
         args = notes_put_args.parse_args()
         temp["body"] = args["body"]
-        return temp
+        return make_response(temp, 200)
 
     def post(self, title):
         if get_note("title", title) is not None:
@@ -74,7 +77,7 @@ class NoteByTitle(Resource):
         args["id"] = next_id
         args["title"] = title
         notes.append(args)
-        return next_id
+        return make_response('New note with id: {:d} created.'.format(next_id), 200)
 
 
 class AllNotes(Resource):
