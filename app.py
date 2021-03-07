@@ -26,8 +26,7 @@ def get_note(param, key):
     for note in notes:
         if note[param] == key:
             return note
-    response = make_response("Note not found.", 404)
-    return response
+    return None
 
 
 class Note(Resource):
@@ -37,15 +36,15 @@ class Note(Resource):
     def put(self, note_id):
         temp = get_note("id", note_id)
         if temp is None:
-            return None
+            return make_response("Note not found.", 404)
         args = notes_put_args.parse_args()
         for k, v in args.items():
             temp[k] = v
-        return temp
+        return make_response(temp, 200)
 
     def delete(self, note_id):
         notes.remove(get_note("id", note_id))
-        return notes
+        return make_response(notes, 200)
 
 
 class NoteByTitle(Resource):
