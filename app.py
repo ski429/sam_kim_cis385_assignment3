@@ -38,13 +38,17 @@ class Note(Resource):
         if temp is None:
             return make_response("Note not found.", 404)
         args = notes_put_args.parse_args()
+        print(args.items())
         for k, v in args.items():
             temp[k] = v
         return make_response(temp, 200)
 
     def delete(self, note_id):
-        notes.remove(get_note("id", note_id))
-        return make_response(notes, 200)
+        temp = get_note("id", note_id)
+        if temp is None:
+            return make_response('Note {:d} not found.'.format(note_id), 404)
+        notes.remove(temp)
+        return make_response('Note {:d} was deleted.'.format(note_id), 200)
 
 
 class NoteByTitle(Resource):
