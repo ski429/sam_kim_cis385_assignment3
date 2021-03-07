@@ -31,7 +31,10 @@ def get_note(param, key):
 
 class Note(Resource):
     def get(self, note_id):
-        return get_note("id", note_id)
+        temp = get_note("id", note_id)
+        if temp is None:
+            return make_response("Note not found.", 404)
+        return make_response(temp, 200)
 
     def put(self, note_id):
         temp = get_note("id", note_id)
